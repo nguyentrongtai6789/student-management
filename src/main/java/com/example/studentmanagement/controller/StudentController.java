@@ -165,7 +165,7 @@ public class StudentController {
         return new ModelAndView("error");
     }
     @PostMapping("/searchByname/{name}")
-    public ResponseEntity searchByName(@PathVariable("name") String name){
+    public ResponseEntity<List<Student>> searchByName(@PathVariable("name") String name){
         List<Student> list = serviceStudent.searchByName(name);
         ResponseEntity response = new ResponseEntity(list, HttpStatus.OK);
         return response;

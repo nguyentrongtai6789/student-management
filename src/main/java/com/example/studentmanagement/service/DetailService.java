@@ -2,7 +2,6 @@ package com.example.studentmanagement.service;
 
 import com.example.studentmanagement.model.DetailStudentAndSubject;
 import com.example.studentmanagement.model.Student;
-import com.example.studentmanagement.model.Subject;
 import com.example.studentmanagement.repository.IDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,8 +44,12 @@ public class DetailService implements IDetailService{
     public void deleteById(Long id) {
         detailRepository.deleteById(id);
     }
-    public List<DetailStudentAndSubject> findAllByStudentId(int id_student){
-        List<DetailStudentAndSubject> list = detailRepository.findAllByStudentId(id_student);
+    public List<DetailStudentAndSubject> findAll(){
+        List<DetailStudentAndSubject> list = detailRepository.findAll();
         return list;
+    }
+
+    public List<DetailStudentAndSubject> findAllDetailStudentByStudent(Student student){
+        return detailRepository.listDetailStudentAndSubject(student);
     }
 }

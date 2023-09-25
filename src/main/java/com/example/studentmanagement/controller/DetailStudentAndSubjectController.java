@@ -13,11 +13,5 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/api/detail")
 public class DetailStudentAndSubjectController {
-    @Autowired
-    private DetailService detailService;
-    @GetMapping("/detail_student_and_subject/{id_student}")
-    public ResponseEntity<List<DetailStudentAndSubject>> listDetailByStudentId(@PathVariable("id_student") int id_student){
-        ResponseEntity<List<DetailStudentAndSubject>> list = new ResponseEntity<>(detailService.findAllByStudentId(id_student), HttpStatus.OK);
-        return list;
-    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.studentmanagement.service;
 
 import com.example.studentmanagement.model.DetailStudentAndSubject;
+import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.model.Subject;
 import com.example.studentmanagement.repository.ISubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ import java.util.Optional;
 public class SubjectService implements ISubjectService{
     @Autowired
     private ISubjectRepository subjectRepository;
+    @Autowired
+    private DetailService detailService;
+    @Autowired
+    private StudentService studentService;
 
     @Override
     public List<Subject> findAll() {
@@ -41,10 +46,14 @@ public class SubjectService implements ISubjectService{
     public void deleteById(Long id) {
         subjectRepository.deleteById(id);
     }
-//    public List<Subject> subjectList(List<DetailStudentAndSubject> list){
-//        List<Subject> list1 = new ArrayList<>();
-//        for (int i = 0; i < list.size(); i++) {
-//            if (list.get(i).)
-//        }
-//    }
+    public List<Subject> subjectListByIdStudent(Long id_student){
+        List<DetailStudentAndSubject> list = detailService.findAll();
+        List<Subject> list1 = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getStudent().getId().equals(id_student)){
+                list1.add(list.get(i).getSubject());
+            }
+        }
+        return list1;
+    }
 }

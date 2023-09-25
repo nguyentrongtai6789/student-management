@@ -2,7 +2,6 @@ package com.example.studentmanagement.repository;
 
 import com.example.studentmanagement.model.DetailStudentAndSubject;
 import com.example.studentmanagement.model.Student;
-import com.example.studentmanagement.model.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +22,5 @@ public interface IDetailRepository extends JpaRepository<DetailStudentAndSubject
 //    List<DetailStudentAndSubject> getSubjectCheckedByStudent(Long id); // lấy ra list detail của student đó
     List<DetailStudentAndSubject> findAllByStudent(Student student);
     @Query(value = "delete from detail where id_student = ?1", nativeQuery = true)
-    List<DetailStudentAndSubject> findAllByStudentId(int id_student);
+    List<DetailStudentAndSubject> listDetailStudentAndSubject(Student student);
 }
