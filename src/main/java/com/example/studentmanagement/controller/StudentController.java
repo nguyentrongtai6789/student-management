@@ -14,14 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -40,6 +36,7 @@ public class StudentController {
     private ISubjectService subjectService;
     @Value("${upload}")
     private String fileUpload;
+
 
     @GetMapping("/getListSubject")
     public ResponseEntity<List<Subject>> getListSubject() {
@@ -161,5 +158,11 @@ public class StudentController {
     @ExceptionHandler(IOException.class)
     public ModelAndView show2() {
         return new ModelAndView("error");
+    }
+    @PostMapping("/searchByname{name}")
+    public ResponseEntity<Page> searchByName(@PathVariable("name") String name, Pageable pageable){
+        Page<List<Student>>  listPage = studentService.searchByName(name, pageable);
+        ResponseEntity response = new ResponseEntity(listPage, HttpStatus.OK);
+        return response;
     }
 }

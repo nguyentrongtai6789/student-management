@@ -7,10 +7,26 @@
     <title>List product</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/home.js"></script>
     <link rel="stylesheet" href="../css/home.css">
+<!--    <script src="../js/searchByName.js"></script>-->
+    <script type="text/javascript" src="../js/home.js"></script>
 </head>
 <body onload="loadData(0)">
+<!--<form id="search-by-name">-->
+<!--    <table>-->
+<!--        <th>-->
+<!--            <td>Họ và tên</td>-->
+<!--            <td>Địa chỉ</td>-->
+<!--            <td>Ảnh</td>-->
+<!--            <td>Các môn học đã đăng ký</td>-->
+<!--            <td>Trạng thái</td>-->
+<!--            <td>Sửa thông tin</td>-->
+<!--            <td>Xóa sinh viên</td>-->
+<!--            <td>Xem thông tin</td>-->
+<!--        </th>-->
+<!--        <div id="list-search"></div>-->
+<!--    </table>-->
+<!--</form>-->
 <div style="text-align: center" id="homie">
     <h1>HOMIE</h1>
 </div>
@@ -22,6 +38,10 @@
         Xem danh sách môn học
     </button>
 </div>
+<form id="search_by_name" style="text-align: center">
+    <input>
+    <button type="submit" onclick="searchByName()">Search</button>
+</form>
 <div style="text-align: center" id="btn-home">
     <button onclick="loadData(0)">Back to home</button>
 </div>
