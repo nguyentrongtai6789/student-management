@@ -45,4 +45,8 @@ public class DetailService implements IDetailService{
     public void deleteById(Long id) {
         detailRepository.deleteById(id);
     }
+    public List<DetailStudentAndSubject> findAllByStudentId(int id_student){
+        List<DetailStudentAndSubject> list = detailRepository.findAllByStudentId(id_student);
+        return list;
+    }
 }

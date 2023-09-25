@@ -3,10 +3,7 @@ package com.example.studentmanagement.controller;
 import com.example.studentmanagement.model.DetailStudentAndSubject;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.model.Subject;
-import com.example.studentmanagement.service.IDetailService;
-import com.example.studentmanagement.service.IStatusService;
-import com.example.studentmanagement.service.IStudentService;
-import com.example.studentmanagement.service.ISubjectService;
+import com.example.studentmanagement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -17,6 +14,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +32,8 @@ public class StudentController {
     private IDetailService detailService;
     @Autowired
     private ISubjectService subjectService;
+    @Autowired
+    private StudentService serviceStudent;
     @Value("${upload}")
     private String fileUpload;
 
@@ -82,27 +82,32 @@ public class StudentController {
             @RequestParam("name") String name,
             @RequestParam("address") String address,
             @RequestParam("id_status") Long id_status,
-            @RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
+            @RequestParam(value = "multipartFile", required = false) MultipartFile multipartFile) throws IOException {
         Student student = new Student();
         student.setName(name);
         student.setAddress(address);
         student.setStatus(statusService.findById(id_status).get());
-        student.setMultipartFile(multipartFile);
-        student.setCount_subject(listIdSubject.size());
-
-        // nếu id = 0 tức là tạo mới thì cho id = null;
         if (id == 0) {
             student.setId(null);
             return validStudent(student);
         }
+        student.setMultipartFile(multipartFile);
         student.setId(id);
+        if (multipartFile == null) { // nếu không chọn ảnh thì set lại url cũ
+            student.setUrl_img(studentService.findById(id).get().getUrl_img());
+        }
+        student.setCount_subject(listIdSubject.size());
+
+        // nếu id = 0 tức là tạo mới thì cho id = null;
+
         // xoá hết các detail cũ của student:
         detailService.deleteAllByStudent_Id(id);
-        for (Long idSubject: listIdSubject) {
+        for (Long idSubject : listIdSubject) {
             detailService.save(new DetailStudentAndSubject(student, subjectService.findById(idSubject).get()));
         }
         return validStudent(student);
     }
+
     @PostMapping("/addNewStudent")
     public ResponseEntity<Map<String, String>> saveCreateStudent(
             @RequestParam("id") Long id,
@@ -119,6 +124,7 @@ public class StudentController {
         student.setId(null);
         return validStudent(student);
     }
+
     private ResponseEntity<Map<String, String>> validStudent(Student student) throws IOException {
         Map<String, String> errors = new HashMap<>();
         if (student.getName().isEmpty() || student.getName().equals("")) {
@@ -129,8 +135,7 @@ public class StudentController {
             errors.put("address", "Dia chi khong duoc trong");
             return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
         }
-        if (student.getMultipartFile().isEmpty() || student.getMultipartFile().getSize() == 0) {
-            student.setUrl_img("default.jpg");
+        if (student.getMultipartFile() == null) {
             studentService.save(student);
             return new ResponseEntity<>(Collections.singletonMap("message", "Product created successfully"), HttpStatus.CREATED);
         }
@@ -159,10 +164,10 @@ public class StudentController {
     public ModelAndView show2() {
         return new ModelAndView("error");
     }
-    @PostMapping("/searchByname{name}")
-    public ResponseEntity<Page> searchByName(@PathVariable("name") String name, Pageable pageable){
-        Page<List<Student>>  listPage = studentService.searchByName(name, pageable);
-        ResponseEntity response = new ResponseEntity(listPage, HttpStatus.OK);
+    @PostMapping("/searchByname/{name}")
+    public ResponseEntity searchByName(@PathVariable("name") String name){
+        List<Student> list = serviceStudent.searchByName(name);
+        ResponseEntity response = new ResponseEntity(list, HttpStatus.OK);
         return response;
     }
 }

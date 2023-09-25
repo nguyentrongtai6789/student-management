@@ -19,53 +19,50 @@ function searchByName() {
         },
         type: "POST",
         data:"",
-        url: "http://localhost:8080/api/students/searchByname" + name + "&size=3",
-        success: function (response){
-            displayData(response.content);
-            displayPagination(response.number, response.totalPages);
+        url: "http://localhost:8080/api/students/searchByname?" + name + "?size=3",
+        success: function (students){
+            content = "<table>" + "<tr>" +
+                `<th>Họ và tên</th>`+
+                `<th>Địa chỉ</th>`+
+                `<th>Ảnh</th>`+
+                `<th>Các môn học đăng ký</th>`+
+                `<th>Trạng thái</th>`+
+                `<th>Delete</th>`+
+                `<th>Edit</th>`+
+                `<th>view</th>`+
+                '</tr>';
+                if (students !== null && students.size !== 0){
+                    for (let i = 0; i < students.length; i++) {
+                        content += getStudent(students[i]);
+                    }
+                }
+               content += "</table>";
+                document.getElementById("listStudent").innerHTML = content;
         }
     })
 }
-function displayData(students) {
-    let content = '    <table id="list-student-home"><tr>\n' +
-        '        <th width="200px">Họ và tên</td>\n' +
-        '        <th width="150px">Địa chỉ</td>\n' +
-        '        <th width="100px">Ảnh</td>\n' +
-        '        <th width="180px">Các môn học đã đăng kí</td>\n' +
-        '        <th width="120px">Trạng thái</td>\n' +
-        '        <th width="80px">Edit</td>\n' +
-        '        <th width="80px">Delete</td>\n' +
-        '        <th width="80px">View</td>\n' +
-        '    </tr>';
-    for (let i = 0; i < students.length; i++) {
-        content += getStudent(students[i]);
-    }
-    content += "</table>"
-    document.getElementById("listStudent").innerHTML = content;
-    for (let i = 0; i < students.length; i++) {
-        getListSubjectOfStudent(students[i])
-    }
+function getStudent(student){
+return  "<tr>" +
+    `<td>${student.name}</td>` +
+    `<td>${student.address}</td>` +
+    `<td><img src="C:\\Users\\admin\\Desktop\\student-management\\src\\main\\webapp\\image\\ +${student.image}"></td>` +
+    `<td><div id='listDetail'>`+ listDetail(student.id) +`</div></td>` +
+    `<td>${student.status.name}</td>` +
+    `<td><button onclick=''>Delete</button></td>` +
+    `<td><button onclick=''>Edit</button></td>` +
+    `<td><button onclick=''>View</button></td>` +
+    "</tr>";
 }
-function displayPagination(currentPage, totalPages) {
-    var pagination = $('#pagination');
-    pagination.empty();
-    if (totalPages > 1) {
-        var prevButton = '<button id="prevButton" onclick="loadData(' + (currentPage - 1) + ')">Previous</button>';
-        pagination.append(prevButton);
-    }
-
-    for (var i = 0; i < totalPages; i++) {
-        var pageNumber = i;
-        if (i === currentPage) {
-            pagination.append('<span class="currentPage">' + pageNumber + '</span>');
-        } else {
-            var pageButton = '<button onclick="loadData(' + pageNumber + ')">' + pageNumber + '</button>';
-            pagination.append(pageButton);
+function listDetail(id_student) {
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/detail/detail_student_and_subject/{id_student}",
+        success: function (details){
+           if (details !== null && details.size !== 0){
+               for (let i = 0; i < details.length; i++) {
+                   <p>${details.subject.name}</p>
+               }
+           }
         }
-    }
-
-    if (totalPages > 1) {
-        var nextButton = '<button id="nextButton" onclick="loadData(' + (currentPage + 1) + ')">Next</button>';
-        pagination.append(nextButton);
-    }
+    })
 }

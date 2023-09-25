@@ -34,9 +34,8 @@ public class StudentService implements IStudentService{
         studentRepository.deleteById(id);
     }
 
-    @Override
-    public Page<List<Student>> searchByName(String name, Pageable pageable) {
-        return studentRepository.searchByName(name, pageable);
+    public List<Student> searchByName(String name) {
+        return studentRepository.searchByName(name);
     }
 
 

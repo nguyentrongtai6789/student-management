@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface IStudentRepository extends JpaRepository<Student, Long> {
     @Query(value = "select * from student where name like %?%", nativeQuery = true)
-    Page<List<Student>> searchByName(String name, Pageable pageable);
+    List<Student> searchByName(String name);
 }
