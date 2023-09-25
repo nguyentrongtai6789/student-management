@@ -60,6 +60,20 @@ function getAllSubjectToSelect() {
                 checkbox.type = 'checkbox';
                 checkbox.name = 'subject';
                 checkbox.value = subject.id;
+                checkbox.addEventListener('change', function () {
+                    let subjectSelected = [];
+                    let selectedCount = 0;
+                    $("input[name='subject']:checked").each(function () {
+                        if (selectedCount < 3) {
+                            subjectSelected.push($(this).val());
+                            selectedCount++;
+                        } else {
+                            $(this).prop('checked', false);// Bỏ chọn lựa chọn vượt quá số lượng tối đa
+                            alert("Chỉ được chọn tối đa 3 phân môn!")
+                            event.preventDefault();
+                        }
+                    });
+                })
                 let label = document.createElement('label');
                 label.appendChild(document.createTextNode(subject.name));
                 container.appendChild(checkbox);
@@ -142,8 +156,12 @@ function saveEditStudent() {
     let multipartFile = $('#file-image-edit')[0].files[0];
     let id_status = $('#id_status-edit').val();
     let subjectSelected = [];
+    let selectedCount = 0;
     $("input[name='subject']:checked").each(function () {
-        subjectSelected.push($(this).val());
+        if (selectedCount < 3) {
+            subjectSelected.push($(this).val());
+            selectedCount++;
+        }
     });
     let formData = new FormData();
     formData.append("name", name);
