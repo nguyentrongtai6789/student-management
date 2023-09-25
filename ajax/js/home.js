@@ -146,35 +146,49 @@ function saveEditStudent() {
         subjectSelected.push($(this).val());
     });
     let formData = new FormData();
-    if ($('#file-image-edit')[0].files.length > 0) {
-        formData.append("multipartFile", multipartFile);
-    } else {
-        let defaultImageFile = new File(["default"], "src/main/webapp/image/default.jpg", { type: "image/jpeg/jpg" });
-        formData.append("multipartFile", defaultImageFile);
-    }
     formData.append("name", name);
     formData.append("address", address);
     formData.append("id_status", id_status);
     formData.append("id", idEdit);
     formData.append("arrayIdSubject", subjectSelected);
-    $.ajax({
-        url: "http://localhost:8080/api/students",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            loadData(0);
-            alert(data);
-        },
-        error: function (xhr, status, error) {
-            let errorMessage = JSON.parse(xhr.responseText);
-            displayErrors(errorMessage);
-        }
-    });
-    // console.log("a");
-    // console.log(formData);
-    event.preventDefault();
+    if ($('#file-image-edit')[0].files.length > 0) {
+        formData.append("multipartFile", multipartFile);
+        // trường hợp chọn ảnh thì gửi multipartfile lên:
+        $.ajax({
+            url: "http://localhost:8080/api/students",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                loadData(0);
+                alert(data);
+            },
+            error: function (xhr, status, error) {
+                let errorMessage = JSON.parse(xhr.responseText);
+                displayErrors(errorMessage);
+            }
+        });
+        event.preventDefault();
+    } else {
+        // trường hợp không chọn ảnh: không đưa multipartfile lên:
+        $.ajax({
+            url: "http://localhost:8080/api/students",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                loadData(0);
+                alert(data);
+            },
+            error: function (xhr, status, error) {
+                let errorMessage = JSON.parse(xhr.responseText);
+                displayErrors(errorMessage);
+            }
+        });
+        event.preventDefault();
+    }
 }
 
 function deleteStudent(id) {

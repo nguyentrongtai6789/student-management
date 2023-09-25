@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -85,20 +86,24 @@ public class StudentController {
             @RequestParam("name") String name,
             @RequestParam("address") String address,
             @RequestParam("id_status") Long id_status,
-            @RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
+            @RequestParam(value = "multipartFile", required = false) MultipartFile multipartFile) throws IOException {
         Student student = new Student();
         student.setName(name);
         student.setAddress(address);
         student.setStatus(statusService.findById(id_status).get());
-        student.setMultipartFile(multipartFile);
-        student.setCount_subject(listIdSubject.size());
-
-        // nếu id = 0 tức là tạo mới thì cho id = null;
         if (id == 0) {
             student.setId(null);
             return validStudent(student);
         }
+        student.setMultipartFile(multipartFile);
         student.setId(id);
+        if (multipartFile == null) { // nếu không chọn ảnh thì set lại url cũ
+            student.setUrl_img(studentService.findById(id).get().getUrl_img());
+        }
+        student.setCount_subject(listIdSubject.size());
+
+        // nếu id = 0 tức là tạo mới thì cho id = null;
+
         // xoá hết các detail cũ của student:
         detailService.deleteAllByStudent_Id(id);
         for (Long idSubject : listIdSubject) {
@@ -133,6 +138,10 @@ public class StudentController {
         if (student.getAddress().isEmpty() || student.getAddress().equals("")) {
             errors.put("address", "Dia chi khong duoc trong");
             return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+        }
+        if (student.getMultipartFile() == null) {
+            studentService.save(student);
+            return new ResponseEntity<>(Collections.singletonMap("message", "Product created successfully"), HttpStatus.CREATED);
         }
         saveImg(student);
         studentService.save(student);
