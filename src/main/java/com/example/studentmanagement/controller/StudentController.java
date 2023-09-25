@@ -101,11 +101,12 @@ public class StudentController {
         student.setId(id);
         // xoá hết các detail cũ của student:
         detailService.deleteAllByStudent_Id(id);
-        for (Long idSubject: listIdSubject) {
+        for (Long idSubject : listIdSubject) {
             detailService.save(new DetailStudentAndSubject(student, subjectService.findById(idSubject).get()));
         }
         return validStudent(student);
     }
+
     @PostMapping("/addNewStudent")
     public ResponseEntity<Map<String, String>> saveCreateStudent(
             @RequestParam("id") Long id,
@@ -122,6 +123,7 @@ public class StudentController {
         student.setId(null);
         return validStudent(student);
     }
+
     private ResponseEntity<Map<String, String>> validStudent(Student student) throws IOException {
         Map<String, String> errors = new HashMap<>();
         if (student.getName().isEmpty() || student.getName().equals("")) {
@@ -131,11 +133,6 @@ public class StudentController {
         if (student.getAddress().isEmpty() || student.getAddress().equals("")) {
             errors.put("address", "Dia chi khong duoc trong");
             return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
-        }
-        if (student.getMultipartFile().isEmpty() || student.getMultipartFile().getSize() == 0) {
-            student.setUrl_img("default.jpg");
-            studentService.save(student);
-            return new ResponseEntity<>(Collections.singletonMap("message", "Product created successfully"), HttpStatus.CREATED);
         }
         saveImg(student);
         studentService.save(student);

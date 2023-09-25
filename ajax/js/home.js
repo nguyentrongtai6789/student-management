@@ -47,6 +47,7 @@ function displayData(students) {
         getListSubjectOfStudent(students[i])
     }
 }
+
 function getAllSubjectToSelect() {
     document.getElementById("subject-to-select").innerHTML = "";
     $.ajax({
@@ -54,7 +55,7 @@ function getAllSubjectToSelect() {
         url: 'http://localhost:8080/api/students//getAllSubject',
         success: function (listSubject) {
             let container = document.getElementById('subject-to-select');
-            listSubject.forEach(function (subject){
+            listSubject.forEach(function (subject) {
                 let checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.name = 'subject';
@@ -68,6 +69,7 @@ function getAllSubjectToSelect() {
         }
     });
 }
+
 function getListSubjectOfStudent(student) {
     let id = student.id;
     let content = "";
@@ -87,7 +89,7 @@ function getListSubjectOfStudent(student) {
 function getStudent(student) {
     return `<tr><td >${student.name}</td><td >${student.address}</td><td >
            <img style="width: 100px; height: 100px" src="\\src\\main\\webapp\\image\\${student.url_img}" alt="Khong co anh"></td>` +
-        `<td id="subject-checked-${student.id}">`  + `</td><td>${student.status.name}</td>` +
+        `<td id="subject-checked-${student.id}">` + `</td><td>${student.status.name}</td>` +
         `<td><button onclick="deleteStudent(${student.id})">Delete</button></td>` +
         `<td><button onclick="showFormEditStudent(${student.id})">Edit</button></td>` +
         `<td><button onclick="">View</button></td></tr>`;
@@ -104,8 +106,10 @@ function showFormEditStudent(id) {
     document.getElementById("homie").style.display = "block";
     document.getElementById("btn-create-student").style.display = "block";
     document.getElementById("form-edit-student").style.display = "block";
+    document.getElementById("form-edit-student").reset();
+    document.getElementById("image-edit").innerHTML = "";
     document.getElementById("listStudent").style.display = "none";
-    document.getElementById("subject-checked").innerHTML="";
+    document.getElementById("subject-checked").innerHTML = "";
     $.ajax({
         headers: {
             'Accept': 'application/json',
@@ -116,6 +120,7 @@ function showFormEditStudent(id) {
         url: `http://localhost:8080/api/students/getStudentById/${id}`,
         //xử lý khi thành công
         success: function (student) {
+            // hiện thông tin lên form edit
             idEdit = student.id
             console.log(student.id)
             $('#name-edit').val(student.name);
@@ -137,16 +142,21 @@ function saveEditStudent() {
     let multipartFile = $('#file-image-edit')[0].files[0];
     let id_status = $('#id_status-edit').val();
     let subjectSelected = [];
-    $("input[name='subject']:checked").each(function() {
+    $("input[name='subject']:checked").each(function () {
         subjectSelected.push($(this).val());
     });
     let formData = new FormData();
+    if ($('#file-image-edit')[0].files.length > 0) {
+        formData.append("multipartFile", multipartFile);
+    } else {
+        let defaultImageFile = new File(["default"], "src/main/webapp/image/default.jpg", { type: "image/jpeg/jpg" });
+        formData.append("multipartFile", defaultImageFile);
+    }
     formData.append("name", name);
     formData.append("address", address);
-    formData.append("multipartFile", multipartFile);
     formData.append("id_status", id_status);
     formData.append("id", idEdit);
-    formData.append("arrayIdSubject", subjectSelected );
+    formData.append("arrayIdSubject", subjectSelected);
     $.ajax({
         url: "http://localhost:8080/api/students",
         type: "POST",
@@ -208,6 +218,9 @@ function displayPagination(currentPage, totalPages) {
 }
 
 function showFormCreate() {
+    document.getElementById("form-create-student").reset();
+    document.getElementById("valid-name").innerHTML = "";
+    document.getElementById("valid-address").innerHTML = "";
     document.getElementById("form-create-student").style.display = "block";
     document.getElementById("listStudent").style.display = "none";
     document.getElementById("homie").style.display = "none";
@@ -216,22 +229,8 @@ function showFormCreate() {
     document.getElementById("btn-home").style.display = "block";
 }
 
-// function checkValid() {
-//     document.getElementById("valid-name").style.display = "none";
-//     document.getElementById("valid-address").style.display = "none";
-//     let name = $('#name').val();
-//     let address = $('#address').val();
-//     let multipartFile = $('#file-image')[0].files[0];
-//     let id_status = $('#id_status').val();
-//     if (name==="") {
-//         document.getElementById("valid-name").innerHTML="Tên không được để trống!";
-//     }
-//     if (address==="") {
-//         document.getElementById("valid-address").innerHTML="Địa chỉ không được để trống!";
-//     }
-//     event.preventDefault();
-//     addNewStudent(name,address, multipartFile, id_status);
-// }
+
+
 function addNewStudent() {
     let name = $('#name').val();
     let address = $('#address').val();
@@ -240,7 +239,12 @@ function addNewStudent() {
     let formData = new FormData();
     formData.append("name", name);
     formData.append("address", address);
-    formData.append("multipartFile", multipartFile);
+    if ($('#file-image')[0].files.length > 0) {
+        formData.append("multipartFile", multipartFile);
+    } else {
+        let defaultImageFile = new File(["default"], "src/main/webapp/image/default.jpg", { type: "image/jpeg/jpg" });
+        formData.append("multipartFile", defaultImageFile);
+    }
     formData.append("id_status", id_status);
     formData.append("id", 0);
     $.ajax({
@@ -316,4 +320,3 @@ function displayListSubject(list) {
     document.getElementById("list-subject").innerHTML = content;
 }
 
-alert("helloworld")

@@ -20,7 +20,7 @@ public class Student {
     private String url_img;
     @Transient
     private MultipartFile multipartFile;
-    @Min(0)
+    @Min(value = 0)
     @Max(value = 3, message = "Dang ki toi da 3 phan mon!")
     private int count_subject = 0;
     @ManyToOne
