@@ -1,0 +1,38 @@
+#list-student-home td, tr, th {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding-left: 10px;
+}
+#list-student-home {
+    margin: auto;
+    border: 2px solid;
+    border-collapse: collapse;
+}
+#form-create-student table {
+    width: 500px;
+    margin: auto;
+    border: 2px solid;
+    border-collapse: collapse;
+}
+#form-create-student tr {
+    height: 30px;
+}
+#form-edit-student {
+    display: none;
+}
+#form-edit-student table {
+    width: 500px;
+    margin: auto;
+    border: 2px solid;
+    border-collapse: collapse;
+}
+#list-subject {
+    margin: auto;
+    border: 2px solid;
+    border-collapse: collapse;
+}
+#list-subject td, tr, th {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding-left: 10px;
+}

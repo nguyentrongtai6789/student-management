@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <title>List product</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="home.js"></script>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body onload="loadData(0)">
+<div style="text-align: center" id="homie">
+    <h1>HOMIE</h1>
+</div>
+<div style="text-align: center" id="btn-create-student">
+    <button onclick="showFormCreate()">Create new student</button>
+</div>
+<div style="text-align: center">
+    <button onclick="showListSubject()">
+        Xem danh sách môn học
+    </button>
+</div>
+<div style="text-align: center" id="btn-home">
+    <button onclick="loadData(0)">Back to home</button>
+</div>
+<br>
+<div id="list-subject"></div>
+<div id="listStudent">
+</div>
+<form id="form-create-student" enctype="multipart/form-data">
+    <h1>Create new student</h1>
+    <table>
+        <tr>
+            <td width="150px">Họ và tên:</td>
+            <td><input type="text" id="name" name="name" placeholder="Họ và tên" width="100px">
+                <span id="valid-name"></span></td>
+        </tr>
+        <tr>
+            <td>Địa chỉ:</td>
+            <td><input type="text" id="address" name="address" placeholder="Địa chỉ">
+                <span id="valid-address"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Ảnh:</td>
+            <td><input type="file" id="file-image" name="multipartFile"></td>
+        </tr>
+        <tr>
+            <td>Trạng thái:</td>
+            <td><input type="number" id="id_status"></td>
+        </tr>
+        <tr style="text-align: center">
+            <td colspan="2">
+                <button type="submit" onclick="addNewStudent()">Thêm</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<form id="form-edit-student" enctype="multipart/form-data">
+    <h1>Edit student</h1>
+    <table>
+        <tr>
+            <td width="150px">Họ và tên:</td>
+            <td><input type="text" id="name-edit" name="name" placeholder="Họ và tên" width="100px">
+                <span id="valid-name-edit"></span></td>
+        </tr>
+        <tr>
+            <td>Địa chỉ:</td>
+            <td><input type="text" id="address-edit" name="address" placeholder="Địa chỉ">
+                <span id="valid-address-edit"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Ảnh:</td>
+            <td><img src="#" alt="Không có ảnh" id="image-edit" style="width: 100px; height: 100px">
+                <input type="file" id="file-image-edit" name="multipartFile"></td>
+        </tr>
+        <tr>
+            <td style="width: 200px">Các môn học đã đăng kí:</td>
+            <td><span id="subject-checked"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Đăng kí môn học mới:</td>
+            <td>
+                <span id="subject-to-select"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Trạng thái:</td>
+            <td><input type="number" id="id_status-edit"></td>
+        </tr>
+        <tr style="text-align: center">
+            <td colspan="2">
+                <button type="submit" onclick="saveEditStudent()">Thêm</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<br>
+<div id="pagination" style="text-align: center"></div>
+</body>
+</html>
