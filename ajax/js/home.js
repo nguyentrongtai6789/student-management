@@ -172,7 +172,7 @@ function saveEditStudent() {
             contentType: false,
             success: function (data) {
                 loadData(0);
-                alert(data);
+                alert("Sửa thành công!");
             },
             error: function (xhr, status, error) {
                 let errorMessage = JSON.parse(xhr.responseText);
@@ -279,7 +279,7 @@ function addNewStudent() {
         contentType: false,
         success: function (data) {
             loadData(0);
-            alert(data);
+            alert("Thêm thành công!");
         },
         error: function (xhr, status, error) {
             let errorMessage = JSON.parse(xhr.responseText);
