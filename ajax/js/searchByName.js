@@ -34,7 +34,6 @@ function searchByName() {
             }
             content += "</table>";
             document.getElementById("listStudent").innerHTML = content;
-            console.log("line47")
         }
     })
 }
@@ -59,8 +58,8 @@ function getStudent1(student) {
         "<td><img class=\"img_in_table\" src=\"..\\..\\src\\main\\webapp\\image\\" + student.url_img + "\"></td>" +
         "<td><div id=\"listDetail\"></div></td>" +
         "<td>" + student.status.name + "</td>" +
-        "<td><button onclick=\"\">Delete</button></td>" +
-        "<td><button onclick=\"\">Edit</button></td>" +
+        "<td><button onclick=\"deleteStudent("+ student.id +")\">Delete</button></td>" +
+        "<td><button onclick=\" showFormEditStudent("+ student.id +")\">Edit</button></td>" +
         "<td><button onclick=\"\">View</button></td>" +
         "</tr>";
 }

@@ -211,7 +211,6 @@ function deleteStudent(id) {
         success: function (data) {
             loadData(0)
             alert(data)
-            console.log(data)
         }
     });
 }
