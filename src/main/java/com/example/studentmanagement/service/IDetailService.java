@@ -10,4 +10,5 @@ import java.util.List;
 public interface IDetailService extends IGenerateService<DetailStudentAndSubject>{
     void deleteAllByStudent_Id(Long id);
     List<DetailStudentAndSubject> findAllByStudent(Student student);
+    List<DetailStudentAndSubject> selectAllByStudent_Id(Long id);
 }

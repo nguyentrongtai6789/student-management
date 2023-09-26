@@ -77,7 +77,7 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> saveEditStudent(
-            @RequestParam("arrayIdSubject") List<Long> listIdSubject,
+            @RequestParam("arrayIdSubject") List<Long> listIdSubject, // trả về 1 list id của các subject được đăng kí
             @RequestParam("id") Long id,
             @RequestParam("name") String name,
             @RequestParam("address") String address,
@@ -96,15 +96,58 @@ public class StudentController {
         if (multipartFile == null) { // nếu không chọn ảnh thì set lại url cũ
             student.setUrl_img(studentService.findById(id).get().getUrl_img());
         }
-        student.setCount_subject(listIdSubject.size());
+        student.setCount_subject(listIdSubject.size()); // set số các môn học đã đăng kí cho học sinh
+        // set số các học sinh đã đăng kí cho môn học:
+        // lấy ra tất cả các môn học:
+        List<Subject> allSubject = subjectService.findAll();
+        // nếu id môn học có trong cái list id được chọn thì thêm số lượng +1:
+        for (Subject subject : allSubject) {
+            for (Long idSub : listIdSubject) {
+                int count = subject.getCount_student();
+                if (idSub == subject.getId()) {
+                    count++;
+                    subject.setCount_student(count);
+                    subjectService.save(subject);
+                }
+            }
+        }
+        // xem trong cái detail cũ cái subject nào không có thì trừ count_student đi:
+        List<DetailStudentAndSubject> details = detailService.selectAllByStudent_Id(id);
+        for (Subject subject: allSubject) {
+            for (DetailStudentAndSubject detail: details) {
+                if (subject.getId() == detail.getSubject().getId()) {// lấy ra được subject đăng kí trước đó
+                    if (listIdSubject.size() == 0) {
+                        int count = subject.getCount_student();
+                        count --;
+                        if (count < 0) {
+                            count = 0;
+                        }
+                        subject.setCount_student(count);
+                        subjectService.save(subject);
+                    } else {
+                        for (Long idSub: listIdSubject) { // duyện list đăng kí mới
+                            int count = subject.getCount_student();
+                            if (idSub!= subject.getId()) { // nếu subject cũ không có trong list
+                                count--;
+                                if (count < 0) {
+                                    count = 0;
+                                }
+                                subject.setCount_student(count);
+                                subjectService.save(subject);
+                            }
+                        }
+                    }
 
-        // nếu id = 0 tức là tạo mới thì cho id = null;
-
-        // xoá hết các detail cũ của student:
+                }
+            }
+        }
+        // mặc định là xoá hết các detail cũ của student:
         detailService.deleteAllByStudent_Id(id);
         for (Long idSubject : listIdSubject) {
+            // set lại cái detail với student này và subject mới
             detailService.save(new DetailStudentAndSubject(student, subjectService.findById(idSubject).get()));
         }
+        // lấy ra list detail mới:
         return validStudent(student);
     }
 
