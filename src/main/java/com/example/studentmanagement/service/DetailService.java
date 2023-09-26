@@ -27,6 +27,11 @@ public class DetailService implements IDetailService{
     }
 
     @Override
+    public List<DetailStudentAndSubject> selectAllByStudent_Id(Long id) {
+        return detailRepository.selectAllByStudent_Id(id);
+    }
+
+    @Override
     public Page<DetailStudentAndSubject> findAll(Pageable pageable) {
         return detailRepository.findAll(pageable);
     }
