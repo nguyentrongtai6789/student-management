@@ -3,10 +3,7 @@ package com.example.studentmanagement.controller;
 import com.example.studentmanagement.model.DetailStudentAndSubject;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.model.Subject;
-import com.example.studentmanagement.service.IDetailService;
-import com.example.studentmanagement.service.IStatusService;
-import com.example.studentmanagement.service.IStudentService;
-import com.example.studentmanagement.service.ISubjectService;
+import com.example.studentmanagement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -14,15 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -39,8 +32,11 @@ public class StudentController {
     private IDetailService detailService;
     @Autowired
     private ISubjectService subjectService;
+    @Autowired
+    private StudentService serviceStudent;
     @Value("${upload}")
     private String fileUpload;
+
 
     @GetMapping("/getListSubject")
     public ResponseEntity<List<Subject>> getListSubject() {
@@ -210,5 +206,11 @@ public class StudentController {
     @ExceptionHandler(IOException.class)
     public ModelAndView show2() {
         return new ModelAndView("error");
+    }
+    @PostMapping("/searchByname/{name}")
+    public ResponseEntity<List<Student>> searchByName(@PathVariable("name") String name){
+        List<Student> list = serviceStudent.searchByName(name);
+        ResponseEntity response = new ResponseEntity(list, HttpStatus.OK);
+        return response;
     }
 }

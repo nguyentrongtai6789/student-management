@@ -16,18 +16,10 @@ function loadData(page) {
 
         }
     });
-    console.log(page)
 }
 
 // hiện danh sách student:
 function displayData(students) {
-    // var studentList = $('#listStudent');
-    // studentList.empty();
-    //
-    // for (var i = 0; i < students.length; i++) {
-    //     var student = students[i];
-    //     studentList.append('<div>' + student.name + ' - ' + student.address + '</div>');
-    // }
     let content = '    <table id="list-student-home"><tr>\n' +
         '        <th width="200px">Họ và tên</td>\n' +
         '        <th width="150px">Địa chỉ</td>\n' +
@@ -219,7 +211,6 @@ function deleteStudent(id) {
         success: function (data) {
             loadData(0)
             alert(data)
-            console.log(data)
         }
     });
 }
@@ -259,6 +250,7 @@ function showFormCreate() {
     document.getElementById("btn-create-student").style.display = "none";
     document.getElementById("pagination").style.display = "none";
     document.getElementById("btn-home").style.display = "block";
+    document.getElementById("search_by_name").style.display = "none";
 }
 
 

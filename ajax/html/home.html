@@ -7,8 +7,9 @@
     <title>List product</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/home.js"></script>
     <link rel="stylesheet" href="../css/home.css">
+    <script src="../js/searchByName.js"></script>
+    <script type="text/javascript" src="../js/home.js"></script>
 </head>
 <body onload="loadData(0)">
 <div style="text-align: center" id="homie">
@@ -22,6 +23,11 @@
         Xem danh sách môn học
     </button>
 </div>
+<form id="search_by_name" style="text-align: center">
+    <input id="searchbyname">
+    <button type="button" onclick="searchByName()">Search</button>
+</form>
+<button onclick="">Search by multiple fields</button>
 <div style="text-align: center" id="btn-home">
     <button onclick="loadData(0)">Back to home</button>
 </div>

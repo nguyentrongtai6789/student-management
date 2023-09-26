@@ -7,11 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class StudentService implements IStudentService{
     @Autowired
     private IStudentRepository studentRepository;
+
     @Override
     public Page<Student> findAll(Pageable pageable) {
         return studentRepository.findAll(pageable);
@@ -31,4 +33,10 @@ public class StudentService implements IStudentService{
     public void deleteById(Long id) {
         studentRepository.deleteById(id);
     }
+
+    public List<Student> searchByName(String name) {
+        return studentRepository.searchByName(name);
+    }
+
+
 }

@@ -36,3 +36,11 @@
     border-collapse: collapse;
     padding-left: 10px;
 }
+.img_in_table{
+    width: 100px; height: 100px
+}
+.table_detail{
+    margin: auto;
+    border: 2px solid;
+    border-collapse: collapse;
+}
