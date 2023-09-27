@@ -27,4 +27,14 @@ public class SubjectController {
         ResponseEntity<List<Subject>> response = new ResponseEntity<>(subjectList, HttpStatus.OK);
         return response;
     }
+    @GetMapping
+    public ResponseEntity<List<String>> listSubject(){
+        List<String> nameSubjects = new ArrayList<>();
+        List<Subject> list = subjectService.findAll();
+        for (int i = 0; i < list.size(); i++) {
+            nameSubjects.add(list.get(i).getName());
+        }
+        ResponseEntity<List<String>> response = new ResponseEntity<>(nameSubjects,HttpStatus.OK);
+        return response;
+    }
 }

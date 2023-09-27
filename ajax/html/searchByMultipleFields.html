@@ -3,8 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../js/searchByMultipleFields.js"></script>
+    <script src="../js/searchByName.js"></script>
 </head>
 <body>
-
+<div id="search-T">Search title</div>
+<form id="title">
+    <select id="city">
+        <option value="Hà nội">Hà nội</option>
+        <option value="HCM">HCM</option>
+        <option value="Đà Nẵng">Đà Nẵng</option>
+        <option value="Vũng Tàu">Vũng Tàu</option>
+    </select>
+    <select id="status">
+        <option value="4">Bảo Lưu</option>
+        <option value="2">Tốt nghiệp</option>
+        <option value="1">Đang học</option>
+        <option value="3">Đình chỉ</option>
+    </select>
+    <button type="button" onclick="searchByMultipleFields()">search</button>
+</form>
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class StatusService implements IStatusService{
@@ -31,5 +32,11 @@ public class StatusService implements IStatusService{
     @Override
     public void deleteById(Long id) {
         statusRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Status> findAll() {
+        List<Status> statusList = statusRepository.findAll();
+        return statusList;
     }
 }

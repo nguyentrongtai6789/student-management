@@ -33,6 +33,9 @@ public class StudentService implements IStudentService{
     public void deleteById(Long id) {
         studentRepository.deleteById(id);
     }
+    public List<Student> findAll(){
+        return studentRepository.findAll();
+    }
 
     public List<Student> searchByName(String name) {
         return studentRepository.searchByName(name);
