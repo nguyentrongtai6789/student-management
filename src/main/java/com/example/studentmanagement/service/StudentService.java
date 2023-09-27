@@ -15,6 +15,11 @@ public class StudentService implements IStudentService{
     private IStudentRepository studentRepository;
 
     @Override
+    public List<Student> listAllStudent() {
+        return studentRepository.findAll();
+    }
+
+    @Override
     public Page<Student> findAll(Pageable pageable) {
         return studentRepository.findAll(pageable);
     }

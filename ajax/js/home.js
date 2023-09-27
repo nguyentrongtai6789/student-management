@@ -155,13 +155,13 @@ function saveEditStudent() {
             selectedCount++;
         }
     });
-    let formData = new FormData();
-    formData.append("name", name);
-    formData.append("address", address);
-    formData.append("id_status", id_status);
-    formData.append("id", idEdit);
-    formData.append("arrayIdSubject", subjectSelected);
     if ($('#file-image-edit')[0].files.length > 0) {
+        let formData = new FormData();
+        formData.append("name", name);
+        formData.append("address", address);
+        formData.append("id_status", id_status);
+        formData.append("id", idEdit);
+        formData.append("arrayIdSubject", subjectSelected);
         formData.append("multipartFile", multipartFile);
         // trường hợp chọn ảnh thì gửi multipartfile lên:
         $.ajax({
@@ -171,8 +171,8 @@ function saveEditStudent() {
             processData: false,
             contentType: false,
             success: function (data) {
-                loadData(0);
                 alert("Sửa thành công!");
+                loadData(0);
             },
             error: function (xhr, status, error) {
                 let errorMessage = JSON.parse(xhr.responseText);
@@ -181,6 +181,12 @@ function saveEditStudent() {
         });
         event.preventDefault();
     } else {
+        let formData = new FormData();
+        formData.append("name", name);
+        formData.append("address", address);
+        formData.append("id_status", id_status);
+        formData.append("id", idEdit);
+        formData.append("arrayIdSubject", subjectSelected);
         // trường hợp không chọn ảnh: không đưa multipartfile lên:
         $.ajax({
             url: "http://localhost:8080/api/students",
@@ -189,8 +195,8 @@ function saveEditStudent() {
             processData: false,
             contentType: false,
             success: function (data) {
+                alert("Sửa thành công!");
                 loadData(0);
-                alert(data);
             },
             error: function (xhr, status, error) {
                 let errorMessage = JSON.parse(xhr.responseText);
@@ -335,12 +341,27 @@ function displayListSubject(list) {
     for (let i = 0; i < list.length; i++) {
         content += `<tr><td >${i + 1}</td>` +
             `<td>${list[i].name}</td>` +
-            `<td>${list[i].count_student}</td>` +
+            `<td>${list[i].count_student} <br>
+            <span id="list-student-checked-subject-${list[i].id}"></span></td>`+
             `<td><button onclick="">Delete</button></td>` +
             `<td><button onclick="">Edit</button></td>` +
             `<td><button onclick="">View</button></td></tr>`;
+            getListNameOfStudentCheckedThisSubject(list[i].id);
     }
     content += "</table>"
     document.getElementById("list-subject").innerHTML = content;
+    // document.getElementById(`list-student-checked-this-subject-${list[i].id}`).innerHTML = "abc"
 }
-
+function getListNameOfStudentCheckedThisSubject(id) {
+    let content = "";
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/api/students/getStudentCheckedSubject/' + id,
+        success: function (data) {
+           for (let i = 0; i < data.length; i ++) {
+               content += data[i] + "<br>";
+           }
+           document.getElementById(`list-student-checked-subject-${id}`).innerHTML = content;
+        }
+    });
+}

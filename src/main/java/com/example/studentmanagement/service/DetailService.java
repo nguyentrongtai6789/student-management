@@ -16,6 +16,11 @@ public class DetailService implements IDetailService{
     private IDetailRepository detailRepository;
 
     @Override
+    public List<DetailStudentAndSubject> findAllList() {
+        return detailRepository.findAll();
+    }
+
+    @Override
     public void deleteAllByStudent_Id(Long id) {
         detailRepository.deleteAllByStudent_Id(id);
     }
