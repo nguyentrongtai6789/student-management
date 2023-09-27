@@ -21,13 +21,9 @@ public class StatusController {
     private StatusService statusService;
 
     @GetMapping
-    public ResponseEntity<List<String>> findAll(){
-        List<String> nameStatus = new ArrayList<>();
+    public ResponseEntity<List<Status>> findAll(){
         List<Status> statusList = statusService.findAll();
-        for (int i = 0; i < statusList.size(); i++) {
-            nameStatus.add(statusList.get(i).getName());
-        }
-        ResponseEntity<List<String>> response = new ResponseEntity<>(nameStatus, HttpStatus.OK);
+        ResponseEntity<List<Status>> response = new ResponseEntity<>(statusList, HttpStatus.OK);
         return response;
     }
 }

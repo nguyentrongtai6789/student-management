@@ -52,7 +52,7 @@ function searchByMultipleFields() {
         type: "POST",
         data: JSON.stringify(title),
         url: "http://localhost:8080/api/title",
-        success: function (data){
+        success: function (data) {
             console.log("cccc");
             console.log(data);
             window.location = "../html/listStudent.html";
@@ -77,6 +77,7 @@ function showListByTitle() {
         }
     })
 }
+
 function getStudent2(student) {
     listDetail2(student);
     return "<tr>" +
@@ -85,11 +86,12 @@ function getStudent2(student) {
         "<td><img class=\"img_in_table\" src=\"..\\..\\src\\main\\webapp\\image\\" + student.url_img + "\"></td>" +
         "<td><div id=\"listDetail\"></div></td>" +
         "<td>" + student.status.name + "</td>" +
-        "<td><button onclick=\"deleteStudent("+ student.id +")\">Delete</button></td>" +
-        "<td><button onclick=\" showFormEditStudent("+ student.id +")\">Edit</button></td>" +
+        "<td><button onclick=\"deleteStudent(" + student.id + ")\">Delete</button></td>" +
+        "<td><button onclick=\" showFormEditStudent(" + student.id + ")\">Edit</button></td>" +
         "<td><button onclick=\"\">View</button></td>" +
         "</tr>";
 }
+
 function getTableTitle2() {
     return ' <table id="list-student-home"><tr>\n' +
         '        <th width="200px">Họ và tên</td>\n' +
@@ -102,6 +104,7 @@ function getTableTitle2() {
         '        <th width="80px">View</td>\n' +
         '    </tr>';
 }
+
 function listDetail2(student) {
     $.ajax({
         type: "GET",
@@ -116,4 +119,39 @@ function listDetail2(student) {
             document.getElementById("listDetail").innerHTML = content1;
         }
     })
+}
+
+function showFormSearch() {
+    // $.ajax({
+    //     type:"GET",
+    //     url: "http://localhost:8080/api/",
+    //     success: function (data){
+    //         let contenr = "";
+    //        if (data !== null && data.length !== 0){
+    //            for (let i = 0; i < data ; i++) {
+    //                 content += "<select>" + "<option value= \"" + data[i]+ "\">" +
+    //                     data[i] + "</option>"+
+    //                     "</select>"
+    //            }
+    //        }
+    //        document.getElementById("address").innerHTML = content
+    //     }
+    // })
+    //
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8080/api/status",
+        success: function (data) {
+            let content = "<select>\"";
+            if (data !== null && data.length !== 0) {
+                for (let i = 0; i < data.length; i++) {
+                    content +=  "<option value= \"" + data[i] + "\">" + data[i] + "</option>";
+                    console.log("data =" + data);
+                }
+                content += "</select>";
+            }
+            document.getElementById("status").innerHTML = content;
+        }
+    })
+
 }
