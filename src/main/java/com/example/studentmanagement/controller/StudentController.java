@@ -40,6 +40,19 @@ public class StudentController {
 
     @GetMapping("/getListSubject")
     public ResponseEntity<List<Subject>> getListSubject() {
+        List<Subject> allSub = subjectService.findAll();
+        List<DetailStudentAndSubject> allDetail = detailService.findAllList();
+        for (Subject subject : allSub) { // duyệt qua tất cả subject
+            int count = 0;
+            for (DetailStudentAndSubject detail : allDetail) {// duyệt detail
+                if (subject.getId() == detail.getSubject().getId()) {// nếu subject có trong detail
+                    count++;
+                }
+            }
+            subject.setCount_student(count);
+            subjectService.save(subject);
+        }
+
         return new ResponseEntity<>(subjectService.findAll(), HttpStatus.OK);
     }
 
@@ -56,6 +69,23 @@ public class StudentController {
     @GetMapping("/getAllSubject")
     public ResponseEntity<List<Subject>> getAllSubject() {
         return new ResponseEntity<>(subjectService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getStudentCheckedSubject/{id}")
+    public ResponseEntity<List<String>> getStudentCheckedSubject(@PathVariable Long id) {
+        List<Student> students = studentService.listAllStudent();
+        List<DetailStudentAndSubject> details = detailService.findAllList();
+        List<String> nameList = new ArrayList<>();
+        for (DetailStudentAndSubject detail : details) {
+            for (Student student : students) {
+                if (student.getId() == detail.getStudent().getId()) {
+                    if (detail.getSubject().getId() == id) {
+                        nameList.add(student.getName());
+                    }
+                }
+            }
+        }
+        return new ResponseEntity<>(nameList, HttpStatus.OK);
     }
 
     @GetMapping("/getSubjectCheckedByStudent/{id}")
@@ -97,51 +127,6 @@ public class StudentController {
             student.setUrl_img(studentService.findById(id).get().getUrl_img());
         }
         student.setCount_subject(listIdSubject.size()); // set số các môn học đã đăng kí cho học sinh
-        // set số các học sinh đã đăng kí cho môn học:
-        // lấy ra tất cả các môn học:
-        List<Subject> allSubject = subjectService.findAll();
-        // nếu id môn học có trong cái list id được chọn thì thêm số lượng +1:
-        for (Subject subject : allSubject) {
-            for (Long idSub : listIdSubject) {
-                int count = subject.getCount_student();
-                if (idSub == subject.getId()) {
-                    count++;
-                    subject.setCount_student(count);
-                    subjectService.save(subject);
-                }
-            }
-        }
-        // xem trong cái detail cũ cái subject nào không có thì trừ count_student đi:
-        List<DetailStudentAndSubject> details = detailService.selectAllByStudent_Id(id);
-        for (Subject subject: allSubject) {
-            for (DetailStudentAndSubject detail: details) {
-                if (subject.getId() == detail.getSubject().getId()) {// lấy ra được subject đăng kí trước đó
-                    if (listIdSubject.size() == 0) {
-                        int count = subject.getCount_student();
-                        count --;
-                        if (count < 0) {
-                            count = 0;
-                        }
-                        subject.setCount_student(count);
-                        subjectService.save(subject);
-                    } else {
-                        for (Long idSub: listIdSubject) { // duyện list đăng kí mới
-                            int count = subject.getCount_student();
-                            if (idSub!= subject.getId()) { // nếu subject cũ không có trong list
-                                count--;
-                                if (count < 0) {
-                                    count = 0;
-                                }
-                                subject.setCount_student(count);
-                                subjectService.save(subject);
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-        // mặc định là xoá hết các detail cũ của student:
         detailService.deleteAllByStudent_Id(id);
         for (Long idSubject : listIdSubject) {
             // set lại cái detail với student này và subject mới
@@ -207,8 +192,9 @@ public class StudentController {
     public ModelAndView show2() {
         return new ModelAndView("error");
     }
+
     @PostMapping("/searchByname/{name}")
-    public ResponseEntity<List<Student>> searchByName(@PathVariable("name") String name){
+    public ResponseEntity<List<Student>> searchByName(@PathVariable("name") String name) {
         List<Student> list = serviceStudent.searchByName(name);
         ResponseEntity response = new ResponseEntity(list, HttpStatus.OK);
         return response;
