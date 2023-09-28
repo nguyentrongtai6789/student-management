@@ -21,23 +21,23 @@ public class TitleController {
     private StudentService studentService;
     @Autowired
     private SubjectService subjectService;
-    private List<Student> list = new ArrayList<>();
+
 
     @PostMapping
-    public ResponseEntity<List<Student>> searchByTitle(@RequestBody Title title){
+    public ResponseEntity<List<Student>> searchByTitle(@RequestBody Title title) {
+        List<Student> list = new ArrayList<>();
         List<Student> students = studentService.findAll();
-        for (int i = 0; i < students.size(); i++) {
-
-            if (students.get(i).getAddress().equals(title.getAddress()) &&
-            students.get(i).getStatus().getId() == title.getStatus()){
-                list.add(students.get(i));
+        for (Student student : students) {
+            if (student.getAddress().equals(title.getAddress()) &&
+                    student.getStatus().getId().equals(title.getStatus())) {
+                list.add(student);
             }
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-    @GetMapping
-    public ResponseEntity<List<Student>> showListStudentByTitle(){
-        ResponseEntity<List<Student>> response = new ResponseEntity<>(list, HttpStatus.OK);
-        return response;
-    }
+
+//    @GetMapping
+//    public ResponseEntity<List<Student>> showListStudentByTitle() {
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+//    }
 }
