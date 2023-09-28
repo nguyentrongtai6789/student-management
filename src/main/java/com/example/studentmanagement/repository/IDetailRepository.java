@@ -26,10 +26,7 @@ public interface IDetailRepository extends JpaRepository<DetailStudentAndSubject
     @Modifying
     @Query(value = "select * from detail where id_student = ?1", nativeQuery = true)
     List<DetailStudentAndSubject> selectAllByStudent_Id(Long id);
-<<<<<<< HEAD
 
-=======
->>>>>>> ed7d553cfaa95597ebe6e288401df24d9d853322
     @Query(value = "delete from detail where id_student = ?1", nativeQuery = true)
     List<DetailStudentAndSubject> listDetailStudentAndSubject(Student student);
 

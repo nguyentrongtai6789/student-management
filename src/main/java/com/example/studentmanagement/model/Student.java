@@ -14,9 +14,12 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotEmpty(message = "Ten khong duoc trong!")
+
     private String name;
+
     @NotEmpty(message = "Dia chi khong duoc trong!")
     private String address;
+
     private String url_img;
     @Transient
     private MultipartFile multipartFile;
