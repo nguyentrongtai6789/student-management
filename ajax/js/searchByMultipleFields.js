@@ -145,7 +145,7 @@ function showFormSearch() {
             let content = "<select>\"";
             if (data !== null && data.length !== 0) {
                 for (let i = 0; i < data.length; i++) {
-                    content +=  "<option value= \"" + data[i] + "\">" + data[i] + "</option>";
+                    content +=  "<option value= \"" + data[i].id + "\">" + data[i].name + "</option>";
                     console.log("data =" + data);
                 }
                 content += "</select>";
